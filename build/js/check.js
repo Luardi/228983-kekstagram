@@ -7,10 +7,10 @@ function getMessage(a,b) {
     return "Переданное SVG-изображение содержит " + a + " объектов и " + (b * 4) + " атрибутов"
   }
   if (typeof a === "object" & typeof b === "object") {
-    return "Общая площадь артефактов сжатия: " + artifactsSquare(a,b) + " пикселей"
+    return "Общая площадь артефактов сжатия: " + artifactsSquare + " пикселей"
   }
   if (typeof a === "object" & typeof b !== "object") {
-    return "Количество красных точек во всех строчках изображения: " + amountOfRedPoints(a)
+    return "Количество красных точек во всех строчках изображения: " + amountOfRedPoints
   }
   var amountOfRedPoints = function (a) {
     for (i=0;i<a.length;i++) {
