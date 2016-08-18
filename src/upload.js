@@ -263,4 +263,36 @@
 
   cleanupResizer();
   updateBackground();
+
+  var resizeX = document.querySelector('#resize-x');
+  var resizeY = document.querySelector('#resize-y');
+  var sideLength = document.querySelector('#resize-size');
+  document.querySelector('#resize-fwd').disabled = true;
+
+  resizeX.min = 0;
+  resizeY.min = 0;
+  sideLength.min = 0;
+
+  var resizePicture = function(x, y, side) {
+    x.max = currentResizer._image.naturalWidth - side.value;
+    y.max = currentResizer._image.naturalHeight - side.value;
+    if (x.value > x.max || y.value > y.max || x.value < x.min || y.value < y.min || side.value < side.min) {
+      document.querySelector('#resize-fwd').disabled = true;
+    } else {
+      document.querySelector('#resize-fwd').disabled = false;
+    }
+  };
+
+  resizeX.onchange = function() {
+    resizePicture(resizeX, resizeY, sideLength);
+  };
+
+  resizeY.onchange = function() {
+    resizePicture(resizeX, resizeY, sideLength);
+  };
+
+  sideLength.onchange = function() {
+    resizePicture(resizeX, resizeY, sideLength);
+  };
+
 })();
