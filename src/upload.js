@@ -263,4 +263,31 @@
 
   cleanupResizer();
   updateBackground();
+
+  var resizeX = document.getElementById('resize-x');
+  var resizeY = document.getElementById('resize-y');
+  var sideLength = document.getElementById('resize-size');
+  var fwdBtn = document.getElementById('resize-fwd');
+
+  resizeX.min = resizeY.min = sideLength.min = 0;
+  resizeX.max = resizeY.max = sideLength.max = 0;
+  fwdBtn.disabled = true;
+
+  var validateResizeForm = function() {
+    var side = parseInt(sideLength.value, 10);
+    var image = currentResizer._image;
+
+    resizeX.max = image.naturalWidth - side;
+    resizeY.max = image.naturalHeight - side;
+
+    sideLength.max = Math.min(image.naturalWidth, image.naturalHeight);
+
+    fwdBtn.disabled = !(
+      resizeX.validity.valid && resizeY.validity.valid && sideLength.validity.valid
+    );
+  };
+
+  resizeX.oninput = resizeY.oninput = sideLength.oninput = validateResizeForm;
+
+
 })();
