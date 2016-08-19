@@ -7,6 +7,7 @@
 
 'use strict';
 
+
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -263,6 +264,29 @@
 
   cleanupResizer();
   updateBackground();
+
+  var browserCookies = require('browser-cookies');
+  var filterSubmit = document.getElementById('filter-fwd');
+  var now = new Date();
+  var whichBDYear = (now > new Date(now.getFullYear() + '-12-09')) ? new Date(now.getFullYear() + '-12-09') : new Date((now.getFullYear() - 1) + '-12-09');
+  var chrome = document.getElementById('upload-filter-chrome');
+  var sepia = document.getElementById('upload-filter-sepia');
+  var marvin = document.getElementById('upload-filter-marvin');
+
+  filterSubmit.onsubmit = function() {
+    var whichFilterSelected;
+    if (chrome.checked) {
+      whichFilterSelected = 'chrome';
+    } else if (sepia.checked) {
+      whichFilterSelected = 'sepia';
+    } else if (marvin.checked) {
+      whichFilterSelected = 'marvin';
+    } else {
+      whichFilterSelected = 'none';
+    }
+    browserCookies.set('filter', whichFilterSelected);
+    browserCookies.set('expired', new Date(now + now - whichBDYear).toUTCString);
+  };
 
   var resizeX = document.getElementById('resize-x');
   var resizeY = document.getElementById('resize-y');
