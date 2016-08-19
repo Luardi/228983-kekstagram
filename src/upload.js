@@ -264,35 +264,30 @@
   cleanupResizer();
   updateBackground();
 
-  var resizeX = document.querySelector('#resize-x');
-  var resizeY = document.querySelector('#resize-y');
-  var sideLength = document.querySelector('#resize-size');
-  document.querySelector('#resize-fwd').disabled = true;
+  var resizeX = document.getElementById('resize-x');
+  var resizeY = document.getElementById('resize-y');
+  var sideLength = document.getElementById('resize-size');
+  var fwdBtn = document.getElementById('resize-fwd');
 
-  resizeX.min = 0;
-  resizeY.min = 0;
-  sideLength.min = 0;
+  resizeX.min = resizeY.min = sideLength.min = 0;
+  resizeX.max = resizeY.max = sideLength.max = 0;
+  fwdBtn.disabled = true;
 
-  var resizePicture = function(x, y, side) {
-    x.max = currentResizer._image.naturalWidth - side.value;
-    y.max = currentResizer._image.naturalHeight - side.value;
-    if (x.value > x.max || y.value > y.max || x.value < x.min || y.value < y.min || side.value < side.min) {
-      document.querySelector('#resize-fwd').disabled = true;
-    } else {
-      document.querySelector('#resize-fwd').disabled = false;
-    }
+  var validateResizeForm = function() {
+    var side = parseInt(sideLength.value, 10);
+    var image = currentResizer._image;
+
+    resizeX.max = image.naturalWidth - side;
+    resizeY.max = image.naturalHeight - side;
+
+    sideLength.max = Math.min(image.naturalWidth, image.naturalHeight);
+
+    fwdBtn.disabled = !(
+      resizeX.validity.valid && resizeY.validity.valid && sideLength.validity.valid
+    );
   };
 
-  resizeX.onchange = function() {
-    resizePicture(resizeX, resizeY, sideLength);
-  };
+  resizeX.oninput = resizeY.oninput = sideLength.oninput = validateResizeForm;
 
-  resizeY.onchange = function() {
-    resizePicture(resizeX, resizeY, sideLength);
-  };
-
-  sideLength.onchange = function() {
-    resizePicture(resizeX, resizeY, sideLength);
-  };
 
 })();
