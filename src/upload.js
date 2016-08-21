@@ -284,8 +284,7 @@
     } else {
       whichFilterSelected = 'none';
     }
-    browserCookies.set('filter', whichFilterSelected);
-    browserCookies.set('expired', new Date(now + now - whichBDYear).toUTCString);
+    browserCookies.set('filter', '' + whichFilterSelected, {expires: new Date(now + now - whichBDYear).toUTCString});
   };
 
   var resizeX = document.getElementById('resize-x');
