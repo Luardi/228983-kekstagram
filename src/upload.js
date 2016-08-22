@@ -267,24 +267,14 @@
 
   var browserCookies = require('browser-cookies');
   var filterSubmit = document.getElementById('upload-filter');
-  var chrome = document.getElementById('upload-filter-chrome');
-  var sepia = document.getElementById('upload-filter-sepia');
-  var marvin = document.getElementById('upload-filter-marvin');
+  var uploadFilterRadio = document.forms['upload-filter'].elements['upload-filter'];
+  uploadFilterRadio.value = browserCookies.get('upload-filter');
 
   filterSubmit.onsubmit = function() {
     var now = new Date();
     var whichBDYear = (now > new Date(now.getFullYear() + '-12-09')) ? new Date(now.getFullYear() + '-12-09') : new Date((now.getFullYear() - 1) + '-12-09');
-    var whichFilterSelected;
-    if (chrome.checked) {
-      whichFilterSelected = 'chrome';
-    } else if (sepia.checked) {
-      whichFilterSelected = 'sepia';
-    } else if (marvin.checked) {
-      whichFilterSelected = 'marvin';
-    } else {
-      whichFilterSelected = 'none';
-    }
-    browserCookies.set('filter', '' + whichFilterSelected, {expires: new Date(now.getTime() * 2 - whichBDYear.getTime())});
+    var whichFilterSelected = uploadFilterRadio.value;
+    browserCookies.set('upload-filter', '' + whichFilterSelected, {expires: new Date(now.getTime() * 2 - whichBDYear.getTime())});
   };
 
   var resizeX = document.getElementById('resize-x');
