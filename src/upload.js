@@ -268,7 +268,9 @@
   var browserCookies = require('browser-cookies');
   var filterSubmit = document.getElementById('upload-filter');
   var uploadFilterRadio = document.forms['upload-filter'].elements['upload-filter'];
-  uploadFilterRadio.value = browserCookies.get('upload-filter');
+  var filrerFromCookie = browserCookies.get('upload-filter');
+  uploadFilterRadio.value = filrerFromCookie;
+  filterImage.className = 'filter-image-preview ' + 'filter-' + filrerFromCookie;
 
   filterSubmit.onsubmit = function() {
     var now = new Date();
