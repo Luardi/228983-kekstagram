@@ -32,7 +32,7 @@ filtersBlock.classList.add('hidden');
 
 var getPictureElement = function(picture) {
   var pictureElement = templateContainer.querySelector('.picture').cloneNode(true);
-  var pictureInTemplate = document.querySelector('template img');
+  var pictureInTemplate = pictureElement.querySelector('img');
   pictureElement.querySelector('.picture-comments').textContent = picture.comments;
   pictureElement.querySelector('.picture-likes').textContent = picture.likes;
 
