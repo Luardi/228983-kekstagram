@@ -14,4 +14,47 @@ var makeJSONPRequest = function(adress, callback) {
 
 makeJSONPRequest('http://localhost:1506/api/pictures', function(data) {
   window.pictures = data;
+  window.pictures.forEach(function(picture) {
+    container.appendChild(getPictureElement(picture));
+  });
 });
+
+
+var filtersBlock = document.querySelector('.filters');
+var container = document.querySelector('.pictures');
+var template = document.querySelector('template');
+var templateContainer = 'content' in template ? template.content : template;
+
+var IMAGE_LOAD_TIMEOUT = 10000;
+
+filtersBlock.classList.add('hidden');
+
+
+var getPictureElement = function(picture) {
+  var pictureElement = templateContainer.querySelector('.picture').cloneNode(true);
+  var pictureInTemplate = pictureElement.querySelector('img');
+  pictureElement.querySelector('.picture-comments').textContent = picture.comments;
+  pictureElement.querySelector('.picture-likes').textContent = picture.likes;
+
+  var newImage = new Image(182, 182);
+  var newImageTimeout = null;
+
+  newImage.onload = function() {
+    clearTimeout(newImageTimeout);
+    pictureElement.replaceChild(newImage, pictureInTemplate);
+  };
+
+  newImage.onerror = function() {
+    pictureElement.classList.add('picture-load-failure');
+  };
+
+  newImage.src = picture.url;
+
+  newImageTimeout = setTimeout(function() {
+    pictureElement.classList.add('picture-load-failure');
+  }, IMAGE_LOAD_TIMEOUT);
+
+  filtersBlock.classList.remove('hidden');
+
+  return pictureElement;
+};
