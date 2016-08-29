@@ -14,6 +14,9 @@ var makeJSONPRequest = function(adress, callback) {
 
 makeJSONPRequest('http://localhost:1506/api/pictures', function(data) {
   window.pictures = data;
+  window.pictures.forEach(function(picture) {
+    container.appendChild(getPictureElement(picture));
+  });
 });
 
 
@@ -29,13 +32,16 @@ filtersBlock.classList.add('hidden');
 
 var getPictureElement = function(picture) {
   var pictureElement = templateContainer.querySelector('.picture').cloneNode(true);
+  var pictureInTemplate = document.querySelector('template img');
+  pictureElement.querySelector('.picture-comments').textContent = picture.comments;
+  pictureElement.querySelector('.picture-likes').textContent = picture.likes;
 
   var newImage = new Image(182, 182);
   var newImageTimeout = null;
 
   newImage.onload = function() {
     clearTimeout(newImageTimeout);
-    pictureElement.appendChild(newImage);
+    pictureInTemplate.src = newImage.src;
   };
 
   newImage.onerror = function() {
@@ -52,8 +58,3 @@ var getPictureElement = function(picture) {
 
   return pictureElement;
 };
-
-
-window.pictures.forEach(function(picture) {
-  container.appendChild(getPictureElement(picture));
-});
