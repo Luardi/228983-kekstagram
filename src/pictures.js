@@ -41,7 +41,7 @@ var getPictureElement = function(picture) {
 
   newImage.onload = function() {
     clearTimeout(newImageTimeout);
-    pictureInTemplate.src = newImage.src;
+    pictureElement.replaceChild(newImage, pictureInTemplate);
   };
 
   newImage.onerror = function() {
