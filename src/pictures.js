@@ -8,10 +8,13 @@ filtersBlock.classList.add('hidden');
 makeJSONPRequest('http://localhost:1506/api/pictures', function(data) {
   var container = document.querySelector('.pictures');
   window.pictures = data;
-  window.pictures.forEach(function(picture) {
-    container.appendChild(getPictureElement(picture));
+  window.pictures.forEach(function(picture, i) {
+    container.appendChild(getPictureElement(picture, i));
   });
   filtersBlock.classList.remove('hidden');
 });
 
 var getPictureElement = require('./picture');
+
+var newGallery = require('./gallery');
+newGallery.setPictures('http://localhost:1506/api/pictures');
