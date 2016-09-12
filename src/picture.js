@@ -24,9 +24,9 @@ var getPictureElement = function(picture, i) {
     pictureElement.classList.add('picture-load-failure');
   };
 
-  newImage.onclick = function() {
+  newImage.onclick = function(e) {
+    e.preventDefault();
     newGallery.show(i);
-    newGallery.setActivePicture(i);
   };
 
   newImage.src = picture.url;
