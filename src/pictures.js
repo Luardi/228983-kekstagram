@@ -12,9 +12,9 @@ makeJSONPRequest('http://localhost:1506/api/pictures', function(data) {
     container.appendChild(getPictureElement(picture, i));
   });
   filtersBlock.classList.remove('hidden');
+  newGallery.setPictures(window.pictures);
 });
 
 var getPictureElement = require('./picture');
 
 var newGallery = require('./gallery');
-newGallery.setPictures('http://localhost:1506/api/pictures');
