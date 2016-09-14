@@ -10,7 +10,7 @@ var Picture = module.exports = function(picture, i) {
   this.data = picture;
   this.index = i;
 
-  return this.createPictureElement(picture);
+  this.createPictureElement(picture);
 };
 
 
@@ -42,7 +42,6 @@ Picture.prototype.createPictureElement = function(picture) {
     this.element.classList.add('picture-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
 
-  return this.element;
 };
 
 Picture.prototype.onImageClick = function(event) {

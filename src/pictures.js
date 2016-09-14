@@ -9,12 +9,13 @@ makeJSONPRequest('http://localhost:1506/api/pictures', function(data) {
   var container = document.querySelector('.pictures');
   var pictures = data;
   pictures.forEach(function(picture, i) {
-    container.appendChild(new GetPictureElement(picture, i));
+    var newPicture = new Picture(picture, i);
+    container.appendChild(newPicture.element);
   });
   filtersBlock.classList.remove('hidden');
   newGallery.setPictures(pictures);
 });
 
-var GetPictureElement = require('./picture');
+var Picture = require('./picture');
 
 var newGallery = require('./gallery');
