@@ -28,11 +28,11 @@ Picture.prototype.createPictureElement = function(picture) {
   this.image.onload = function() {
     clearTimeout(newImageTimeout);
     this.element.replaceChild(this.image, pictureInTemplate);
-  };
+  }.bind(this);
 
   this.image.onerror = function() {
     this.element.classList.add('picture-load-failure');
-  };
+  }.bind(this);
 
   this.image.onclick = this.onImageClick.bind(this);
 
