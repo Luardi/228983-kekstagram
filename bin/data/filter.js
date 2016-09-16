@@ -5,13 +5,13 @@ module.exports = function(list, filterID) {
     case 'filter-new':
       return list.sort(
         function(a, b) {
-          return a.created - b.created;
+          return b.created - a.created;
         }
       );
     case 'filter-discussed':
       return list.sort(
         function(a, b) {
-          return a.comments - b.comments;
+          return b.comments - a.comments;
         }
       );
     default:

@@ -5,6 +5,7 @@ var Picture = require('./picture');
 var newGallery = require('./gallery');
 
 var pageNumber = 0;
+var maxPage = 100;
 var pageSize = 12;
 var THROTTLE_TIMEOUT = 100;
 var GAP = 100;
@@ -30,6 +31,9 @@ var loadDataWithParam = function(currentPageNumber, filter) {
     });
     filtersBlock.classList.remove('hidden');
     newGallery.setPictures(pictures);
+    if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP && pageNumber < maxPage) {
+      loadDataWithParam(++pageNumber, activeFilter);
+    }
   });
 };
 
@@ -50,9 +54,9 @@ filtersBlock.addEventListener('change', function(evt) {
 var lastCall = Date.now();
 
 window.addEventListener('scroll', function() {
-  if (Date.now - lastCall >= THROTTLE_TIMEOUT) {
-    if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP) {
-      loadDataWithParam(pageNumber++, activeFilter);
+  if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
+    if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP && pageNumber < maxPage) {
+      loadDataWithParam(++pageNumber, activeFilter);
     }
     lastCall = Date.now();
   }

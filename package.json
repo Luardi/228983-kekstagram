@@ -39,10 +39,7 @@
   "config": {
     "pre-git": {
       "commit-msg": "",
-      "pre-commit": [
-        "git rev-parse --abbrev-ref HEAD >branch-name",
-        "git add branch-name"
-      ]
+      "pre-commit": []
     }
   }
 }
