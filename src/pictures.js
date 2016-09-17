@@ -31,14 +31,16 @@ var loadDataWithParam = function(filter, force) {
     filter: filter
   };
 
+  var offset = newGallery.pictures.length;
+
   makeRequest('http://localhost:1506/api/pictures', params, function(data) {
     var pictures = data;
     pictures.forEach(function(picture, i) {
-      var newPicture = new Picture(picture, i);
+      var newPicture = new Picture(picture, i + offset);
       container.appendChild(newPicture.element);
     });
     filtersBlock.classList.remove('hidden');
-    newGallery.setPictures(pictures);
+    newGallery.appendPictures(pictures);
     if (needToLoad()) {
       ++pageNumber;
       loadDataWithParam(activeFilter);
@@ -46,6 +48,7 @@ var loadDataWithParam = function(filter, force) {
   });
 };
 
+newGallery.setPictures([]);
 loadDataWithParam(activeFilter, true);
 
 var changeFilter = function(filterID) {
@@ -53,6 +56,7 @@ var changeFilter = function(filterID) {
   activeFilter = filterID;
   pageNumber = 0;
   filtersBlock.classList.add('hidden');
+  newGallery.setPictures([]);
   loadDataWithParam(activeFilter);
 };
 

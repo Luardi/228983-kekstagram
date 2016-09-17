@@ -15,6 +15,10 @@ var Gallery = function() {
 Gallery.prototype.setPictures = function(arr) {
   this.pictures = arr;
 };
+Gallery.prototype.appendPictures = function(arr) {
+  this.pictures = this.pictures.concat(arr);
+};
+
 Gallery.prototype.show = function(num) {
   galleryOverlayClose.onclick = this.hide;
   var self = this;
