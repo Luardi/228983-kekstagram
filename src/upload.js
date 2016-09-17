@@ -312,7 +312,10 @@
   sideLength.addEventListener('input', validateResizeForm);
 
   window.addEventListener('resizerchange', function() {
-    currentResizer.getConstraint();
+    var xyside = currentResizer.getConstraint();
+    resizeX.value = xyside.x;
+    resizeY.value = xyside.y;
+    sideLength.value = xyside.side;
   });
 
 
