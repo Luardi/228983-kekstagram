@@ -287,6 +287,7 @@
   var sideLength = document.getElementById('resize-size');
   var fwdBtn = document.getElementById('resize-fwd');
 
+  resizeX.min = resizeY.min = sideLength.min = 0;
 
   var validateResizeForm = function() {
     var side = parseInt(sideLength.value, 10);
@@ -301,7 +302,7 @@
       resizeX.validity.valid && resizeY.validity.valid && sideLength.validity.valid
     );
 
-    currentResizer.setConstraint(resizeX.value, resizeY.value, sideLength.value);
+    currentResizer.setConstraint(parseInt(resizeX.value, 10), parseInt(resizeY.value, 10), parseInt(sideLength.value, 10));
   };
 
   resizeX.addEventListener('input', validateResizeForm);
