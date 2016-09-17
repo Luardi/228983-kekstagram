@@ -52,6 +52,7 @@ var changeFilter = function(filterID) {
   container.innerHTML = '';
   activeFilter = filterID;
   pageNumber = 0;
+  filtersBlock.classList.add('hidden');
   loadDataWithParam(activeFilter);
 };
 
