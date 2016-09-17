@@ -140,7 +140,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -150,7 +150,7 @@
 
         showMessage(Action.UPLOADING);
 
-        fileReader.onload = function() {
+        fileReader.addEventListener('load', function() {
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
@@ -161,7 +161,7 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-        };
+        });
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -169,14 +169,14 @@
         showMessage(Action.ERROR);
       }
     }
-  };
+  });
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -184,14 +184,14 @@
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -207,25 +207,25 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
+  });
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -233,13 +233,13 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -260,7 +260,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  });
 
   cleanupResizer();
   updateBackground();
@@ -275,12 +275,12 @@
     filterImage.className = 'filter-image-preview ' + 'filter-' + filterFromCookie;
   }
 
-  filterSubmit.onsubmit = function() {
+  filterSubmit.addEventListener('submit', function() {
     var now = new Date();
     var whichBDYear = (now > new Date(now.getFullYear() + '-12-09')) ? new Date(now.getFullYear() + '-12-09') : new Date((now.getFullYear() - 1) + '-12-09');
     var whichFilterSelected = uploadFilterRadio.value;
     browserCookies.set('upload-filter', '' + whichFilterSelected, {expires: new Date(now.getTime() * 2 - whichBDYear.getTime())});
-  };
+  });
 
   var resizeX = document.getElementById('resize-x');
   var resizeY = document.getElementById('resize-y');
@@ -288,8 +288,6 @@
   var fwdBtn = document.getElementById('resize-fwd');
 
   resizeX.min = resizeY.min = sideLength.min = 0;
-  resizeX.max = resizeY.max = sideLength.max = 0;
-  fwdBtn.disabled = true;
 
   var validateResizeForm = function() {
     var side = parseInt(sideLength.value, 10);
@@ -303,9 +301,20 @@
     fwdBtn.disabled = !(
       resizeX.validity.valid && resizeY.validity.valid && sideLength.validity.valid
     );
+
+    currentResizer.setConstraint(parseInt(resizeX.value, 10), parseInt(resizeY.value, 10), parseInt(sideLength.value, 10));
   };
 
-  resizeX.oninput = resizeY.oninput = sideLength.oninput = validateResizeForm;
+  resizeX.addEventListener('input', validateResizeForm);
+  resizeY.addEventListener('input', validateResizeForm);
+  sideLength.addEventListener('input', validateResizeForm);
+
+  window.addEventListener('resizerchange', function() {
+    var xyside = currentResizer.getConstraint();
+    resizeX.value = Math.round(xyside.x);
+    resizeY.value = Math.round(xyside.y);
+    sideLength.value = Math.round(xyside.side);
+  });
 
 
 })();
