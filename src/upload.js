@@ -287,9 +287,6 @@
   var sideLength = document.getElementById('resize-size');
   var fwdBtn = document.getElementById('resize-fwd');
 
-  resizeX.min = resizeY.min = sideLength.min = 0;
-  resizeX.max = resizeY.max = sideLength.max = 0;
-  fwdBtn.disabled = true;
 
   var validateResizeForm = function() {
     var side = parseInt(sideLength.value, 10);
@@ -313,9 +310,9 @@
 
   window.addEventListener('resizerchange', function() {
     var xyside = currentResizer.getConstraint();
-    resizeX.value = xyside.x;
-    resizeY.value = xyside.y;
-    sideLength.value = xyside.side;
+    resizeX.value = Math.round(xyside.x);
+    resizeY.value = Math.round(xyside.y);
+    sideLength.value = Math.round(xyside.side);
   });
 
 
