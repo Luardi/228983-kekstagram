@@ -5,11 +5,14 @@ var Picture = require('./picture');
 var newGallery = require('./gallery');
 
 var pageNumber = 0;
-var maxPage = 100;
+
 var pageSize = 12;
 var THROTTLE_TIMEOUT = 100;
 var GAP = 100;
 var activeFilter = 'filter-popular';
+var needToLoad = function() {
+  return (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP);
+};
 
 var footer = document.querySelector('footer');
 var filtersBlock = document.querySelector('.filters');
@@ -17,12 +20,17 @@ var container = document.querySelector('.pictures');
 filtersBlock.classList.add('hidden');
 
 
-var loadDataWithParam = function(currentPageNumber, filter) {
+var loadDataWithParam = function(filter, force) {
+  if(!force && !needToLoad()) {
+    return;
+  }
+
   var params = {
-    from: currentPageNumber * pageSize,
-    to: currentPageNumber * pageSize + pageSize,
+    from: pageNumber * pageSize,
+    to: pageNumber * pageSize + pageSize,
     filter: filter
   };
+
   makeRequest('http://localhost:1506/api/pictures', params, function(data) {
     var pictures = data;
     pictures.forEach(function(picture, i) {
@@ -31,19 +39,20 @@ var loadDataWithParam = function(currentPageNumber, filter) {
     });
     filtersBlock.classList.remove('hidden');
     newGallery.setPictures(pictures);
-    if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP && pageNumber < maxPage) {
-      loadDataWithParam(++pageNumber, activeFilter);
+    if (needToLoad()) {
+      ++pageNumber;
+      loadDataWithParam(activeFilter);
     }
   });
 };
 
-loadDataWithParam(pageNumber, activeFilter);
+loadDataWithParam(activeFilter, true);
 
 var changeFilter = function(filterID) {
   container.innerHTML = '';
   activeFilter = filterID;
   pageNumber = 0;
-  loadDataWithParam(pageNumber, activeFilter);
+  loadDataWithParam(activeFilter);
 };
 
 filtersBlock.addEventListener('change', function(evt) {
@@ -55,8 +64,9 @@ var lastCall = Date.now();
 
 window.addEventListener('scroll', function() {
   if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
-    if (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP && pageNumber < maxPage) {
-      loadDataWithParam(++pageNumber, activeFilter);
+    if (needToLoad()) {
+      ++pageNumber;
+      loadDataWithParam(activeFilter);
     }
     lastCall = Date.now();
   }

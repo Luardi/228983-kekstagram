@@ -38,8 +38,9 @@ Picture.prototype.createPictureElement = function(picture) {
 
   this.image.src = picture.url;
 
+  var self = this;
   newImageTimeout = setTimeout(function() {
-    this.element.classList.add('picture-load-failure');
+    self.element.classList.add('picture-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
 
 };
