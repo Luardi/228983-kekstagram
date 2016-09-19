@@ -21,16 +21,15 @@ Gallery.prototype.appendPictures = function(arr) {
 
 Gallery.prototype.show = function(num) {
   galleryOverlayClose.onclick = this.hide;
-  var self = this;
   galleryOverlayImage.onclick = function() {
-    if (self.activePicture < self.pictures.length) {
-      self.activePicture++;
-      self.setActivePicture(self.activePicture);
+    if (this.activePicture < this.pictures.length) {
+      this.activePicture++;
+      this.setActivePicture(this.activePicture);
     } else {
-      self.activePicture = 0;
-      self.setActivePicture(self.activePicture);
+      this.activePicture = 0;
+      this.setActivePicture(this.activePicture);
     }
-  };
+  }.bind(this);
   galleryOverlay.classList.remove('invisible');
   this.setActivePicture(num);
 };
