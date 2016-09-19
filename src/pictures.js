@@ -32,6 +32,7 @@ var loadDataWithParam = function(filter, force) {
   };
 
   var offset = newGallery.pictures.length;
+  newGallery.setPictures([]);
 
   makeRequest('http://localhost:1506/api/pictures', params, function(data) {
     var pictures = data;
