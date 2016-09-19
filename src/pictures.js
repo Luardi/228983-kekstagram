@@ -61,8 +61,8 @@ var changeFilter = function(filterID) {
 
 var newFilter = localStorage.getItem('filter');
 if (newFilter) {
-  changeFilter(newFilter);
-  document.getElementById(newFilter).checked = true;
+  activeFilter = newFilter;
+  document.getElementById(activeFilter).checked = true;
 }
 
 newGallery.setPictures([]);
