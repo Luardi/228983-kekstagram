@@ -11,7 +11,7 @@ var THROTTLE_TIMEOUT = 100;
 var GAP = 100;
 var activeFilter = 'filter-popular';
 
-var throttle = function(func, thottleTimeout) {
+var throttle = function(func, throttleTimeout) {
   var state = null;
   var stop = 1;
   return function() {
@@ -22,7 +22,7 @@ var throttle = function(func, thottleTimeout) {
     state = stop;
     setTimeout(function() {
       state = null;
-    }, thottleTimeout);
+    }, throttleTimeout);
   };
 };
 
