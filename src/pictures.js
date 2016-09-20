@@ -11,6 +11,21 @@ var THROTTLE_TIMEOUT = 100;
 var GAP = 100;
 var activeFilter = 'filter-popular';
 
+var throttle = function(func, thottleTimeout) {
+  var state = null;
+  var stop = 1;
+  return function() {
+    if (state) {
+      return;
+    }
+    func.apply(this, arguments);
+    state = stop;
+    setTimeout(function() {
+      state = null;
+    }, thottleTimeout);
+  };
+};
+
 var needToLoad = function() {
   return (footer.getBoundingClientRect().bottom - window.innerHeight <= GAP);
 };
@@ -71,14 +86,11 @@ filtersBlock.addEventListener('change', function(evt) {
   changeFilter(evt.target.id);
 }, false);
 
-var lastCall = Date.now();
+var throttledFunction = throttle(function() {
+  console.log('scroll');
+  if (needToLoad()) {
+    ++pageNumber;
+    loadDataWithParam(activeFilter);
+  } }, THROTTLE_TIMEOUT);
 
-window.addEventListener('scroll', function() {
-  if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
-    if (needToLoad()) {
-      ++pageNumber;
-      loadDataWithParam(activeFilter);
-    }
-    lastCall = Date.now();
-  }
-});
+window.addEventListener('scroll', throttledFunction);
