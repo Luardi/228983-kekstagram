@@ -87,7 +87,6 @@ filtersBlock.addEventListener('change', function(evt) {
 }, false);
 
 var throttledFunction = throttle(function() {
-  console.log('scroll');
   if (needToLoad()) {
     ++pageNumber;
     loadDataWithParam(activeFilter);
